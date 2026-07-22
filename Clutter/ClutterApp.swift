@@ -12,7 +12,10 @@ import SwiftData
 struct ClutterApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Topic.self,
+            DailyLog.self,
+            Pool.self,
+            Bullet.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
