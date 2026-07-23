@@ -10,7 +10,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var topics: [Topic]
+    @Query(sort: \Topic.metadata.createdAt) private var topics: [Topic]
     @Query private var dailyLogs: [DailyLog]
     @Query private var pools: [Pool]
     @Query private var bullets: [Bullet]
@@ -23,7 +23,7 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $router.selectedTab) {
             homeTab
-            collectionsTab
+            topicsTab
             dailyLogsTab
             poolTab
         }
@@ -35,14 +35,14 @@ struct ContentView: View {
     
     private func ensurePoolExists() {
         guard pools.isEmpty else { return }
-        modelContext.insert(Pool(title: "Pool"))
+        modelContext.insert(Pool(title: Constants.poolString))
     }
     
     var homeTab: some View {
         NavigationStack(path: $router.homePath) {
             HomeView(topics: topics, dailyLogs: dailyLogs)
                 .navigationDestination(for: Topic.self) { topic in
-                    TopicDetailView(bullets: topic.bullets)
+                    TopicDetailView(topic: topic)
                 }
                 .navigationDestination(for: DailyLog.self) { dailyLog in
                     DailyLogDetailView(bullets: dailyLog.bullets)
@@ -53,11 +53,11 @@ struct ContentView: View {
         .tag(TabRouter.Tab.home)
     }
     
-    var collectionsTab: some View {
-        NavigationStack(path: $router.collectionPath) {
+    var topicsTab: some View {
+        NavigationStack(path: $router.topicPath) {
             TopicsView(topics: topics)
                 .navigationDestination(for: Topic.self) { topic in
-                TopicDetailView(bullets: topic.bullets)
+                    TopicDetailView(topic: topic)
                 }
                 .navigationTitle(Constants.topicsString)
         }
@@ -92,7 +92,11 @@ struct ContentView: View {
     
 }
 
-#Preview() {
+#Preview("With preview container") {
     ContentView()
         .modelContainer(SampleData.previewContainer)
+}
+
+#Preview("With own container") {
+    ContentView()
 }

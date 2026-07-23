@@ -6,21 +6,60 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct TopicDetailView: View {
-    var bullets: [Bullet]
+    @Environment(\.modelContext) private var modelContext
+    @State private var showAddBulletSheet: Bool = false
+    var topic: Topic
     
     var body: some View {
-        ForEach(bullets, id: \.id) { bullet in
-            Text(bullet.title)
+        List {
+            ForEach(topic.bullets, id: \.id) { bullet in
+                Text(bullet.title)
+            }
+            .onDelete { indexSet in
+                    for index in indexSet {
+                        modelContext.delete(topic.bullets[index])
+                }
+            }
         }
- 
+        .navigationTitle(topic.title)
+        .toolbar {
+            if !topic.bullets.isEmpty {
+                Button(Constants.addBulletButtonString, systemImage: Constants.plusIconString) {
+                    showAddBulletSheet = true
+                }
+            }
+        }
+        .sheet(isPresented: $showAddBulletSheet) {
+            AddBulletSheet()
+        }
+        .overlay {
+            if topic.bullets.isEmpty {
+                ContentUnavailableView {
+                    Label(Constants.emptyBulletsLabelString, systemImage: Constants.bulletIconString)
+                } description: {
+                    Text(Constants.emptyBulletsDescriptionString)
+                } actions: {
+                    Button(Constants.addBulletButtonString) {
+                        showAddBulletSheet = true
+                    }
+                }
+                .offset(y: -60)
+            }
+        }
     }
 }
 
-#Preview {
+#Preview("with data") {
     NavigationStack {
-        TopicDetailView(bullets: SampleData.topics[0].bullets)
-            .navigationTitle("TODO: topic title comes here")
+        TopicDetailView(topic: SampleData.topics[0])
+    }
+}
+
+#Preview("empty state") {
+    NavigationStack {
+        TopicDetailView(topic: SampleData.topics[1])
     }
 }

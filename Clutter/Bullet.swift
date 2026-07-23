@@ -17,17 +17,14 @@ class Bullet {
     var metadata: Metadata
  
     init(
-        id: UUID = UUID(),
         title: String,
-        status: BulletStatus = .undone,
         isImportant: Bool = false,
-        metadata: Metadata = Metadata()
     ) {
-        self.id = id
+        self.id = UUID()
         self.title = title
-        self.status = status
+        self.status = .undone
         self.isImportant = isImportant
-        self.metadata = metadata
+        self.metadata = Metadata(createdAt: Date())
     }
 }
 

@@ -32,7 +32,7 @@ enum SampleData {
     }
  
     static func makeBullets(_ seeds: [BulletSeed]) -> [Bullet] {
-        seeds.map { Bullet(title: $0.title, status: $0.status, isImportant: $0.isImportant) }
+        seeds.map { Bullet(title: $0.title, isImportant: $0.isImportant) }
     }
  
     // MARK: - Topics
@@ -48,6 +48,12 @@ enum SampleData {
                 .undone("Budget mit Partner besprechen"),
                 .done("Alte Tapete entfernen")
             ])
+        ),
+        Topic(
+            title: "Hochzeitsplanung",
+            status: .active,
+            isFavorite: true,
+            bullets: []
         ),
         Topic(
             title: "Marathon-Training",

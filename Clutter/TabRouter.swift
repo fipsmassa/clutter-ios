@@ -13,7 +13,7 @@ class TabRouter {
     
     // seperate paths per route/tab
     var homePath = NavigationPath()
-    var collectionPath = NavigationPath()
+    var topicPath = NavigationPath()
     var dailyLogPath = NavigationPath()
     var poolPath = NavigationPath()
  
@@ -54,7 +54,7 @@ class TabRouter {
     func popToRoot(for tab: Tab) {
         switch tab {
         case .home: homePath.removeLast(homePath.count)
-        case .collection: collectionPath.removeLast(collectionPath.count)
+        case .collection: topicPath.removeLast(topicPath.count)
         case .dailyLog: dailyLogPath.removeLast(dailyLogPath.count)
         case .pool: poolPath.removeLast(poolPath.count)
         }

@@ -22,18 +22,16 @@ class Topic {
     @Relationship(deleteRule: .cascade) var bullets: [Bullet]
  
     init(
-        id: UUID = UUID(),
         title: String,
         status: ContainerStatus = .active,
         isFavorite: Bool = false,
         bullets: [Bullet] = [],
-        metadata: Metadata = Metadata()
     ) {
-        self.id = id
+        self.id = UUID()
         self.title = title
         self.status = status
         self.isFavorite = isFavorite
         self.bullets = bullets
-        self.metadata = metadata
+        self.metadata = Metadata(createdAt: Date())
     }
 }

@@ -22,11 +22,12 @@ struct PoolView: View {
                     Label(Constants.emptyPoolLabelString, systemImage: Constants.poolIconString)
                 } description: {
                     Text(Constants.emptyPoolDescriptionString)
-                    } actions: {
-                        Button(Constants.addPoolButtonString) {
-                            print("implement create")
-                            }
-                        }
+                } actions: {
+                    Button(Constants.addPoolButtonString) {
+                        print("implement create")
+                    }
+                }
+                .offset(y: -60)
             }
         }
     }

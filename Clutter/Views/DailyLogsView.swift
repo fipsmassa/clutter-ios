@@ -24,11 +24,12 @@ struct DailyLogsView: View {
                     Label(Constants.emptyDailyLogsLabelString, systemImage: Constants.dailyLogsIconString)
                 } description: {
                     Text(Constants.emptyDailyLogsDescriptionString)
-                    } actions: {
-                        Button(Constants.addDailyLogsButtonString) {
-                            print("implement create")
-                            }
-                        }
+                } actions: {
+                    Button(Constants.addDailyLogsButtonString) {
+                        print("implement create")
+                    }
+                }
+                .offset(y: -60)
             }
         }
     }

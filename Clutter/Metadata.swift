@@ -8,7 +8,7 @@
 import Foundation
 
 struct Metadata: Codable, Hashable {
-    let createdAt: Date
+    var createdAt: Date
     var updatedAt: Date?
     var deletedAt: Date?
  
