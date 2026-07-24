@@ -19,15 +19,15 @@ enum SampleData {
  
     struct BulletSeed {
         let title: String
-        let status: BulletStatus
+        let isDone: Bool
         let isImportant: Bool
  
         static func undone(_ title: String, important: Bool = false) -> BulletSeed {
-            BulletSeed(title: title, status: .undone, isImportant: important)
+            BulletSeed(title: title, isDone: false, isImportant: important)
         }
  
         static func done(_ title: String, important: Bool = false) -> BulletSeed {
-            BulletSeed(title: title, status: .done, isImportant: important)
+            BulletSeed(title: title, isDone: true, isImportant: important)
         }
     }
  
@@ -87,8 +87,8 @@ enum SampleData {
  
     // MARK: - Daily Logs
  
-    static let dailyLogs: [DailyLog] = [
-        DailyLog(
+    static let dailies: [Daily] = [
+        Daily(
             title: "Heute",
             date: Calendar.current.startOfDay(for: .now),
             bullets: makeBullets([
@@ -98,7 +98,7 @@ enum SampleData {
                 .done("30 Minuten spazieren gehen")
             ])
         ),
-        DailyLog(
+        Daily(
             title: "Gestern",
             date: Calendar.current.date(byAdding: .day, value: -1, to: .now) ?? .now,
             isFavorite: true,
@@ -108,13 +108,10 @@ enum SampleData {
                 .done("Mit Mama telefoniert", important: true)
             ])
         ),
-        DailyLog(
+        Daily(
             title: "Vorgestern",
             date: Calendar.current.date(byAdding: .day, value: -2, to: .now) ?? .now,
-            bullets: makeBullets([
-                .done("Team-Meeting um 10 Uhr"),
-                .undone("Steuererklärung begonnen")
-            ])
+            bullets: []
         )
     ]
  
@@ -132,6 +129,13 @@ enum SampleData {
                 .done("WLAN-Passwort Ferienwohnung: siehe Notizen")
             ])
         )
+    
+    static let emptyPool: Pool =
+        Pool(
+            title: "Pool",
+            isFavorite: true,
+            bullets: []
+        )
  
     // MARK: - Preloaded in-memory ModelContainer für Previews
  
@@ -144,7 +148,7 @@ enum SampleData {
     ///     }
     @MainActor
     static var previewContainer: ModelContainer = {
-        let schema = Schema([Topic.self, DailyLog.self, Pool.self, Bullet.self])
+        let schema = Schema([Topic.self, Daily.self, Pool.self, Bullet.self])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: true)
  
         do {
@@ -152,7 +156,7 @@ enum SampleData {
             let context = container.mainContext
  
             topics.forEach { context.insert($0) }
-            dailyLogs.forEach { context.insert($0) }
+            dailies.forEach { context.insert($0) }
             context.insert(pool)
  
             return container

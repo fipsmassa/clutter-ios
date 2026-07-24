@@ -17,16 +17,16 @@ struct Constants {
     static let emptyTopicsDescriptionString = "It seems like no topics have been created yet. Add a new topic to get started."
     static let addTopicsButtonString = "Add Topic"
     
-    // DailyLog strings
-    static let dailyLogsString = "Daily Logs"
-    static let emptyDailyLogsLabelString = "No Logs created"
-    static let emptyDailyLogsDescriptionString = "It seems like no logs have been created yet. Add a new log to get started."
-    static let addDailyLogsButtonString = "Add Log"
+    // Log strings
+    static let dailiesString = "Dailies"
+    static let emptyDailiesLabelString = "No Dailies created"
+    static let emptyDailiesDescriptionString = "It seems like no dailies have been created yet. Add a new daily to get started."
+    static let addDailiesButtonString = "Add Daily"
     
     // Pool strings
     static let poolString = "Pool"
     static let emptyPoolLabelString = "No Pool created"
-    static let emptyPoolDescriptionString = "It seems like no pool has been created yet. Add a new pool to get started."
+    static let emptyPoolDescriptionString = "It seems like no item have been added to the pool yet. Add a new item to get started."
     static let addPoolButtonString = "Add Pool"
     
     // Bullet strings
@@ -37,7 +37,7 @@ struct Constants {
     // Icon strings
     static let homeIconString = "house"
     static let topicsIconString = "list.bullet"
-    static let dailyLogsIconString = "1.calendar"
+    static let logsIconString = "text.page"
     static let poolIconString = "lightbulb"
     static let plusIconString = "plus"
     static let bulletIconString = "square"

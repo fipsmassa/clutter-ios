@@ -34,7 +34,12 @@ struct TopicsView: View {
             }
         }
         .sheet(isPresented: $showAddTopicSheet) {
-            AddTopicSheet()
+            AddTopicSheet { title, isFavorite in
+                let newTopic = Topic(title: title, isFavorite: isFavorite)
+                modelContext.insert(newTopic)
+            }
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
         }
         .overlay {
             if topics.isEmpty {

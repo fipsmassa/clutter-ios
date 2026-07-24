@@ -11,25 +11,33 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Topic.metadata.createdAt) private var topics: [Topic]
-    @Query private var dailyLogs: [DailyLog]
+    @Query(sort: \Daily.metadata.createdAt) private var dailies: [Daily]
     @Query private var pools: [Pool]
-    @Query private var bullets: [Bullet]
+    @Query(sort: \Bullet.metadata.createdAt) private var bullets: [Bullet]
     @State private var router = TabRouter()
     
     private var pool: Pool? {
         pools.first
     }
     
+    let backgroundGradient = LinearGradient(
+        colors: [Color.red, Color.blue],
+        startPoint: .top, endPoint: .bottom)
+    
     var body: some View {
-        TabView(selection: $router.selectedTab) {
-            homeTab
-            topicsTab
-            dailyLogsTab
-            poolTab
-        }
-        .environment(router)
-        .task {
-            ensurePoolExists()
+        ZStack {
+            VStack {
+                TabView(selection: $router.selectedTab) {
+                    homeTab
+                    topicsTab
+                    dailiesTab
+                    poolTab
+                }
+                .environment(router)
+                .task {
+                    ensurePoolExists()
+                }
+            }
         }
     }
     
@@ -40,12 +48,12 @@ struct ContentView: View {
     
     var homeTab: some View {
         NavigationStack(path: $router.homePath) {
-            HomeView(topics: topics, dailyLogs: dailyLogs)
+            HomeView(topics: topics, dailyLogs: dailies)
                 .navigationDestination(for: Topic.self) { topic in
                     TopicDetailView(topic: topic)
                 }
-                .navigationDestination(for: DailyLog.self) { dailyLog in
-                    DailyLogDetailView(bullets: dailyLog.bullets)
+                .navigationDestination(for: Daily.self) { daily in
+                    DailyDetailView(daily: daily)
                 }
                 .navigationTitle(Constants.homeString)
         }
@@ -65,22 +73,22 @@ struct ContentView: View {
         .tag(TabRouter.Tab.collection)
     }
     
-    var dailyLogsTab: some View {
+    var dailiesTab: some View {
         NavigationStack(path: $router.dailyLogPath) {
-            DailyLogsView(dailyLogs: dailyLogs)
-                .navigationDestination(for: DailyLog.self) { dailyLog in
-                    DailyLogDetailView(bullets: dailyLog.bullets)
+            DailiesView(dailies: dailies)
+                .navigationDestination(for: Daily.self) { daily in
+                    DailyDetailView(daily: daily)
                 }
-                .navigationTitle(Constants.dailyLogsString)
+                .navigationTitle(Constants.dailiesString)
         }
-        .tabItem { Label(Constants.dailyLogsString, systemImage: Constants.dailyLogsIconString) }
+        .tabItem { Label(Constants.dailiesString, systemImage: Constants.logsIconString) }
         .tag(TabRouter.Tab.dailyLog)
     }
     
     var poolTab: some View {
         NavigationStack(path: $router.poolPath) {
             if let pool {
-                PoolView(bullets: pool.bullets)
+                PoolView(pool: pool)
                     .navigationTitle(pool.title)
             } else {
                 ProgressView()

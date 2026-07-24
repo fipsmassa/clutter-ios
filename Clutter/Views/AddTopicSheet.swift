@@ -15,6 +15,8 @@ struct AddTopicSheet: View {
     @State private var title: String = ""
     @State private var isFavorite: Bool = false
     
+    var onSave: (_ title: String, _ isFavorite: Bool) -> Void
+    
     var body: some View {
         NavigationStack() {
             Form {
@@ -30,9 +32,7 @@ struct AddTopicSheet: View {
                 
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button(Constants.Action.add) {
-                        print(title)
-                        let newTopic = Topic(title: title, isFavorite: isFavorite)
-                        modelContext.insert(newTopic)
+                        onSave(title, isFavorite)
                         dismiss()
                     }
                 }
@@ -42,5 +42,7 @@ struct AddTopicSheet: View {
 }
 
 #Preview {
-    AddTopicSheet()
+    AddTopicSheet { title, isFavorite in
+        print("Saved: \(title), favorite: \(isFavorite)")
+    }
 }

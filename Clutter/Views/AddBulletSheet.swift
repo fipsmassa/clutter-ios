@@ -9,11 +9,12 @@ import SwiftUI
 import SwiftData
 
 struct AddBulletSheet: View {
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
     
     @State private var title: String = ""
     @State private var isImportant: Bool = false
+    
+    var onSave: (_ title: String, _ isImportant: Bool) -> Void
     
     var body: some View {
         NavigationStack() {
@@ -30,8 +31,7 @@ struct AddBulletSheet: View {
                 
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button(Constants.Action.add) {
-                        let newBullet = Bullet(title: title, isImportant: isImportant)
-                        modelContext.insert(newBullet)
+                        onSave(title, isImportant)
                         dismiss()
                     }
                 }
@@ -41,5 +41,7 @@ struct AddBulletSheet: View {
 }
 
 #Preview {
-    AddBulletSheet()
+    AddBulletSheet { title, isImportant in
+        print("Saved: \(title), important: \(isImportant)")
+    }
 }

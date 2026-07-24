@@ -11,16 +11,17 @@ import SwiftData
 struct TopicDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var showAddBulletSheet: Bool = false
-    var topic: Topic
+    @Bindable var topic: Topic
     
     var body: some View {
         List {
             ForEach(topic.bullets, id: \.id) { bullet in
-                Text(bullet.title)
+                @Bindable var bullet = bullet
+                BulletRowView(bullet: bullet)
             }
             .onDelete { indexSet in
-                    for index in indexSet {
-                        modelContext.delete(topic.bullets[index])
+                for index in indexSet {
+                    modelContext.delete(topic.bullets[index])
                 }
             }
         }
@@ -33,7 +34,13 @@ struct TopicDetailView: View {
             }
         }
         .sheet(isPresented: $showAddBulletSheet) {
-            AddBulletSheet()
+            AddBulletSheet { title, isImportant in
+                let newBullet = Bullet(title: title, isImportant: isImportant)
+                modelContext.insert(newBullet)
+                topic.bullets.append(newBullet)
+            }
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
         }
         .overlay {
             if topic.bullets.isEmpty {

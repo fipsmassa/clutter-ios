@@ -27,7 +27,7 @@ class TabRouter {
             switch self {
             case .home: return Constants.homeString
             case .collection: return Constants.topicsString
-            case .dailyLog: return Constants.dailyLogsString
+            case .dailyLog: return Constants.dailiesString
             case .pool: return Constants.poolString
             }
         }
@@ -36,7 +36,7 @@ class TabRouter {
             switch self {
             case .home: return Constants.homeIconString
             case .collection: return Constants.topicsIconString
-            case .dailyLog: return Constants.dailyLogsIconString
+            case .dailyLog: return Constants.logsIconString
             case .pool: return Constants.poolIconString
             }
         }

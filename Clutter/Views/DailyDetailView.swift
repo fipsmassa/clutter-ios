@@ -1,5 +1,5 @@
 //
-//  PoolView.swift
+//  DailyLogDetailView.swift
 //  Clutter
 //
 //  Created by Philipp Seibold on 13.07.26.
@@ -8,25 +8,26 @@
 import SwiftUI
 import SwiftData
 
-struct PoolView: View {
+struct DailyDetailView: View {
     @Environment(\.modelContext) private var modelContext
+    @Bindable var daily: Daily
     @State private var showAddBulletSheet: Bool = false
-    @Bindable var pool: Pool
     
     var body: some View {
         List {
-            ForEach(pool.bullets, id: \.id) { bullet in
+            ForEach(daily.bullets, id: \.id) { bullet in
                 @Bindable var bullet = bullet
                 BulletRowView(bullet: bullet)
             }
             .onDelete { indexSet in
                 for index in indexSet {
-                    modelContext.delete(pool.bullets[index])
+                    modelContext.delete(daily.bullets[index])
                 }
             }
         }
+        .navigationTitle(daily.title)
         .toolbar {
-            if !pool.bullets.isEmpty {
+            if !daily.bullets.isEmpty {
                 Button(Constants.addBulletButtonString, systemImage: Constants.plusIconString) {
                     showAddBulletSheet = true
                 }
@@ -36,17 +37,17 @@ struct PoolView: View {
             AddBulletSheet { title, isImportant in
                 let newBullet = Bullet(title: title, isImportant: isImportant)
                 modelContext.insert(newBullet)
-                pool.bullets.append(newBullet)
+                daily.bullets.append(newBullet)
             }
                 .presentationDetents([.medium])
                 .presentationDragIndicator(.visible)
         }
         .overlay {
-            if pool.bullets.isEmpty {
+            if daily.bullets.isEmpty {
                 ContentUnavailableView {
-                    Label(Constants.emptyBulletsLabelString, systemImage: Constants.poolIconString)
+                    Label(Constants.emptyBulletsLabelString, systemImage: Constants.bulletIconString)
                 } description: {
-                    Text(Constants.emptyPoolDescriptionString)
+                    Text(Constants.emptyBulletsDescriptionString)
                 } actions: {
                     Button(Constants.addBulletButtonString) {
                         showAddBulletSheet = true
@@ -60,14 +61,12 @@ struct PoolView: View {
 
 #Preview("with data") {
     NavigationStack {
-        PoolView(pool: SampleData.pool)
-            .navigationTitle(Constants.poolString)
+        DailyDetailView(daily: SampleData.dailies[0])
     }
 }
 
 #Preview("empty state") {
     NavigationStack {
-        PoolView(pool: SampleData.emptyPool)
-            .navigationTitle(Constants.poolString)
+        DailyDetailView(daily: SampleData.dailies[2])
     }
 }

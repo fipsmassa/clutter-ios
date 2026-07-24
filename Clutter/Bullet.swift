@@ -12,7 +12,7 @@ import Foundation
 class Bullet {
     @Attribute(.unique) var id: UUID
     var title: String
-    var status: BulletStatus
+    var isDone: Bool
     var isImportant: Bool
     var metadata: Metadata
  
@@ -22,13 +22,8 @@ class Bullet {
     ) {
         self.id = UUID()
         self.title = title
-        self.status = .undone
+        self.isDone = false
         self.isImportant = isImportant
         self.metadata = Metadata(createdAt: Date())
     }
-}
-
-enum BulletStatus: String, Codable, CaseIterable {
-    case undone
-    case done
 }

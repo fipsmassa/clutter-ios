@@ -8,15 +8,17 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(TabRouter.self) private var router
+
     let topics: [Topic]
-    let dailyLogs: [DailyLog]
+    let dailyLogs: [Daily]
     
-    func addTopic() {
-        print("implement me")
+    func navigateToTopicsView() {
+        router.selectedTab = .collection
     }
     
-    func adddailyLog() {
-        print("implement me")
+    func navigateToDailiesView() {
+        router.selectedTab = .dailyLog
     }
     
     var body: some View {
@@ -26,7 +28,7 @@ struct HomeView: View {
                     VStack(spacing: 0) {
                         Text(Constants.emptyTopicsLabelString)
                         Text(Constants.emptyTopicsDescriptionString)
-                        Button(action: addTopic, label: {
+                        Button(action: navigateToTopicsView, label: {
                             Text(Constants.addTopicsButtonString)
                         })
                     }
@@ -39,13 +41,13 @@ struct HomeView: View {
                 }
             }
             
-            Section(Constants.dailyLogsString) {
+            Section(Constants.dailiesString) {
                 if dailyLogs.isEmpty {
                     VStack(spacing: 0) {
-                        Text(Constants.emptyDailyLogsLabelString)
-                        Text(Constants.emptyDailyLogsDescriptionString)
-                        Button(action: adddailyLog, label: {
-                            Text(Constants.addDailyLogsButtonString)
+                        Text(Constants.emptyDailiesLabelString)
+                        Text(Constants.emptyDailiesDescriptionString)
+                        Button(action: navigateToDailiesView, label: {
+                            Text(Constants.addDailiesButtonString)
                         })
                     }
                 } else {
@@ -56,17 +58,17 @@ struct HomeView: View {
                     }
                 }
             }
-            
         }
+
     }
 }
 
 #Preview("with data") {
     NavigationStack {
-        HomeView(topics: SampleData.topics, dailyLogs: SampleData.dailyLogs)
+        HomeView(topics: SampleData.topics, dailyLogs: SampleData.dailies)
             .navigationTitle(Constants.homeString)
-        
     }
+    .environment(TabRouter())
 }
 
 #Preview("empty state") {
@@ -74,4 +76,5 @@ struct HomeView: View {
         HomeView(topics: [], dailyLogs: [])
             .navigationTitle(Constants.homeString)
     }
+    .environment(TabRouter())
 }

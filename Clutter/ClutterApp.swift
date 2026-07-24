@@ -13,7 +13,7 @@ struct ClutterApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Topic.self,
-            DailyLog.self,
+            Daily.self,
             Pool.self,
             Bullet.self
         ])
