@@ -18,11 +18,19 @@ struct TopicDetailView: View {
             ForEach(topic.bullets, id: \.id) { bullet in
                 @Bindable var bullet = bullet
                 BulletRowView(bullet: bullet)
-            }
-            .onDelete { indexSet in
-                for index in indexSet {
-                    modelContext.delete(topic.bullets[index])
-                }
+                
+                    .swipeActions(edge: .leading) {
+                        Button(bullet.isImportant ? Constants.Action.notImportant : Constants.Action.important) {
+                            bullet.isImportant.toggle()
+                        }
+                        .tint(.yellow)
+                    }
+                    .swipeActions {
+                        Button(Constants.Action.delete) {
+                            modelContext.delete(bullet)
+                        }
+                        .tint(.red)
+                    }
             }
         }
         .navigationTitle(topic.title)
@@ -39,8 +47,8 @@ struct TopicDetailView: View {
                 modelContext.insert(newBullet)
                 topic.bullets.append(newBullet)
             }
-                .presentationDetents([.medium])
-                .presentationDragIndicator(.visible)
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
         }
         .overlay {
             if topic.bullets.isEmpty {

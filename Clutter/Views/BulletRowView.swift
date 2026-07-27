@@ -38,6 +38,10 @@ struct BulletRowView: View {
             .frame(width: 20, height: 20)
             .buttonStyle(.plain)
             
+            if bullet.isImportant {
+                Image(systemName: "exclamationmark")
+                    .foregroundColor(.red)
+            }
             TextField(bullet.title, text: $bullet.title)
                 .foregroundColor(bullet.isDone ? .secondary : .primary)
         }

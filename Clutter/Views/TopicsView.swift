@@ -12,17 +12,34 @@ struct TopicsView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var showAddTopicSheet: Bool = false
     var topics: [Topic]
-
+    
+    func delete(_ topic: Topic) {
+        modelContext.delete(topic)
+    }
+    
+    func toggleIsFavorite(_ topic: Topic) {
+        topic.isFavorite.toggle()
+    }
+    
     var body: some View {
         List {
             ForEach(topics, id: \.id) { topic in
+                @Bindable var topic = topic
+                
                 NavigationLink(value: topic) {
                     Text(topic.title)
                 }
-            }
-            .onDelete { indexSet in
-                    for index in indexSet {
-                        modelContext.delete(topics[index])
+                .swipeActions(edge: .leading) {
+                    Button(topic.isFavorite ? Constants.Action.notFavorite : Constants.Action.favorite) {
+                        toggleIsFavorite(topic)
+                    }
+                    .tint(.yellow)
+                }
+                .swipeActions {
+                    Button(Constants.Action.delete) {
+                        delete(topic)
+                    }
+                    .tint(.red)
                 }
             }
         }
@@ -38,8 +55,8 @@ struct TopicsView: View {
                 let newTopic = Topic(title: title, isFavorite: isFavorite)
                 modelContext.insert(newTopic)
             }
-                .presentationDetents([.medium])
-                .presentationDragIndicator(.visible)
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
         }
         .overlay {
             if topics.isEmpty {

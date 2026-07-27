@@ -48,6 +48,10 @@ struct Constants {
         static let delete = "Delete"
         static let cancel = "Cancel"
         static let deleteConfirmation = "Are you sure you want to delete this?"
+        static let favorite = "Favorite"
+        static let notFavorite = "Not Favorite"
+        static let important = "Important"
+        static let notImportant = "Not Important"
     }
     
     // Form strings

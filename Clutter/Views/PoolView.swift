@@ -18,11 +18,19 @@ struct PoolView: View {
             ForEach(pool.bullets, id: \.id) { bullet in
                 @Bindable var bullet = bullet
                 BulletRowView(bullet: bullet)
-            }
-            .onDelete { indexSet in
-                for index in indexSet {
-                    modelContext.delete(pool.bullets[index])
-                }
+                
+                    .swipeActions(edge: .leading) {
+                        Button(bullet.isImportant ? Constants.Action.notImportant : Constants.Action.important) {
+                            bullet.isImportant.toggle()
+                        }
+                        .tint(.yellow)
+                    }
+                    .swipeActions {
+                        Button(Constants.Action.delete) {
+                            modelContext.delete(bullet)
+                        }
+                        .tint(.red)
+                    }
             }
         }
         .toolbar {
@@ -38,8 +46,8 @@ struct PoolView: View {
                 modelContext.insert(newBullet)
                 pool.bullets.append(newBullet)
             }
-                .presentationDetents([.medium])
-                .presentationDragIndicator(.visible)
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
         }
         .overlay {
             if pool.bullets.isEmpty {
