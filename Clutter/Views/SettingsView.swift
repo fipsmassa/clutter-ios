@@ -9,9 +9,16 @@ import SwiftUI
 
 struct SettingsView: View {
     var body: some View {
-        Text("Settings")
-        Text("By me a coffee")
-        Text("Und sonstige Infos")
+        ZStack {
+            Color.blue
+                .ignoresSafeArea()
+            
+            VStack {
+                Text("Settings")
+                Text("By me a coffee")
+                Text("Und sonstige Infos")
+            }
+        }
     }
 }
 

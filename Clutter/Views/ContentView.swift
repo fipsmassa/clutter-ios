@@ -20,10 +20,6 @@ struct ContentView: View {
         pools.first
     }
     
-    let backgroundGradient = LinearGradient(
-        colors: [Color.red, Color.blue],
-        startPoint: .top, endPoint: .bottom)
-    
     var body: some View {
         ZStack {
             VStack {
@@ -56,6 +52,8 @@ struct ContentView: View {
                     DailyDetailView(daily: daily)
                 }
                 .navigationTitle(Constants.homeString)
+                .scrollContentBackground(.hidden)
+                .background(Color.yellow)
         }
         .tabItem { Label(Constants.homeString, systemImage: Constants.homeIconString) }
         .tag(TabRouter.Tab.home)

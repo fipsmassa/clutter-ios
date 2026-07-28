@@ -32,7 +32,10 @@ struct TopicDetailView: View {
                         .tint(.red)
                     }
             }
+            .listRowBackground(Color.yellow)
         }
+        .scrollContentBackground(.hidden)
+        .background(Color.mint)
         .navigationTitle(topic.title)
         .toolbar {
             if !topic.bullets.isEmpty {

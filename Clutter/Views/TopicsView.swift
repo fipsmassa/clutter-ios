@@ -22,54 +22,60 @@ struct TopicsView: View {
     }
     
     var body: some View {
-        List {
-            ForEach(topics, id: \.id) { topic in
-                @Bindable var topic = topic
-                
-                NavigationLink(value: topic) {
-                    Text(topic.title)
-                }
-                .swipeActions(edge: .leading) {
-                    Button(topic.isFavorite ? Constants.Action.notFavorite : Constants.Action.favorite, systemImage: Constants.starIconString) {
-                        toggleIsFavorite(topic)
+        
+        VStack {
+            List {
+                ForEach(topics, id: \.id) { topic in
+                    @Bindable var topic = topic
+                    
+                    NavigationLink(value: topic) {
+                        Text(topic.title)
                     }
-                    .tint(.yellow)
-                }
-                .swipeActions {
-                    Button(Constants.Action.delete, systemImage: Constants.trashIconString) {
-                        delete(topic)
+                    .swipeActions(edge: .leading) {
+                        Button(topic.isFavorite ? Constants.Action.notFavorite : Constants.Action.favorite, systemImage: Constants.starIconString) {
+                            toggleIsFavorite(topic)
+                        }
+                        .tint(.yellow)
                     }
-                    .tint(.red)
+                    .swipeActions {
+                        Button(Constants.Action.delete, systemImage: Constants.trashIconString) {
+                            delete(topic)
+                        }
+                        .tint(.red)
+                    }
                 }
+                .listRowBackground(Color.yellow)
             }
-        }
-        .toolbar {
-            if !topics.isEmpty {
-                Button(Constants.addTopicsButtonString, systemImage: Constants.plusIconString) {
-                    showAddTopicSheet = true
-                }
-            }
-        }
-        .sheet(isPresented: $showAddTopicSheet) {
-            AddTopicSheet { title, isFavorite in
-                let newTopic = Topic(title: title, isFavorite: isFavorite)
-                modelContext.insert(newTopic)
-            }
-            .presentationDetents([.medium])
-            .presentationDragIndicator(.visible)
-        }
-        .overlay {
-            if topics.isEmpty {
-                ContentUnavailableView {
-                    Label(Constants.emptyTopicsLabelString, systemImage: Constants.topicsIconString)
-                } description: {
-                    Text(Constants.emptyTopicsDescriptionString)
-                } actions: {
-                    Button(Constants.addTopicsButtonString) {
+            .scrollContentBackground(.hidden)
+            .background(Color.mint)
+            .toolbar {
+                if !topics.isEmpty {
+                    Button(Constants.addTopicsButtonString, systemImage: Constants.plusIconString) {
                         showAddTopicSheet = true
                     }
                 }
-                .offset(y: -60)
+            }
+            .sheet(isPresented: $showAddTopicSheet) {
+                AddTopicSheet { title, isFavorite in
+                    let newTopic = Topic(title: title, isFavorite: isFavorite)
+                    modelContext.insert(newTopic)
+                }
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+            }
+            .overlay {
+                if topics.isEmpty {
+                    ContentUnavailableView {
+                        Label(Constants.emptyTopicsLabelString, systemImage: Constants.topicsIconString)
+                    } description: {
+                        Text(Constants.emptyTopicsDescriptionString)
+                    } actions: {
+                        Button(Constants.addTopicsButtonString) {
+                            showAddTopicSheet = true
+                        }
+                    }
+                    .offset(y: -60)
+                }
             }
         }
     }
