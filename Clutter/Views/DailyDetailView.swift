@@ -20,13 +20,13 @@ struct DailyDetailView: View {
                 BulletRowView(bullet: bullet)
                 
                     .swipeActions(edge: .leading) {
-                        Button(bullet.isImportant ? Constants.Action.notImportant : Constants.Action.important) {
+                        Button(bullet.isImportant ? Constants.Action.notImportant : Constants.Action.important, systemImage: Constants.exclamationmarkIconString) {
                             bullet.isImportant.toggle()
                         }
                         .tint(.yellow)
                     }
                     .swipeActions {
-                        Button(Constants.Action.delete) {
+                        Button(Constants.Action.delete, systemImage: Constants.trashIconString) {
                             modelContext.delete(bullet)
                         }
                         .tint(.red)

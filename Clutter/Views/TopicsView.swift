@@ -30,13 +30,13 @@ struct TopicsView: View {
                     Text(topic.title)
                 }
                 .swipeActions(edge: .leading) {
-                    Button(topic.isFavorite ? Constants.Action.notFavorite : Constants.Action.favorite) {
+                    Button(topic.isFavorite ? Constants.Action.notFavorite : Constants.Action.favorite, systemImage: Constants.starIconString) {
                         toggleIsFavorite(topic)
                     }
                     .tint(.yellow)
                 }
                 .swipeActions {
-                    Button(Constants.Action.delete) {
+                    Button(Constants.Action.delete, systemImage: Constants.trashIconString) {
                         delete(topic)
                     }
                     .tint(.red)
