@@ -16,6 +16,7 @@ struct DailyDetailView: View {
     var body: some View {
         bulletList
         .navigationTitle(daily.title)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if !daily.bullets.isEmpty {
                 Button(Constants.addBulletButtonString, systemImage: Constants.plusIconString) {
