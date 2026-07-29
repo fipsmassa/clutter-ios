@@ -10,9 +10,6 @@ import SwiftUI
 struct SettingsView: View {
     var body: some View {
         ZStack {
-            Color.blue
-                .ignoresSafeArea()
-            
             VStack {
                 Text("Settings")
                 Text("By me a coffee")

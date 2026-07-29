@@ -42,7 +42,7 @@ struct ContentView: View {
         modelContext.insert(Pool(title: Constants.poolString))
     }
     
-    var homeTab: some View {
+    private var homeTab: some View {
         NavigationStack(path: $router.homePath) {
             HomeView(topics: topics, dailyLogs: dailies)
                 .navigationDestination(for: Topic.self) { topic in
@@ -51,27 +51,26 @@ struct ContentView: View {
                 .navigationDestination(for: Daily.self) { daily in
                     DailyDetailView(daily: daily)
                 }
-                .navigationTitle(Constants.homeString)
-                .scrollContentBackground(.hidden)
-                .background(Color.yellow)
+                .navigationBarTitle(Constants.appString)
         }
         .tabItem { Label(Constants.homeString, systemImage: Constants.homeIconString) }
         .tag(TabRouter.Tab.home)
     }
     
-    var topicsTab: some View {
+   private var topicsTab: some View {
         NavigationStack(path: $router.topicPath) {
             TopicsView(topics: topics)
                 .navigationDestination(for: Topic.self) { topic in
                     TopicDetailView(topic: topic)
                 }
                 .navigationTitle(Constants.topicsString)
+                .navigationBarTitleDisplayMode(.large)
         }
         .tabItem { Label(Constants.topicsString, systemImage: Constants.topicsIconString) }
         .tag(TabRouter.Tab.collection)
     }
     
-    var dailiesTab: some View {
+    private var dailiesTab: some View {
         NavigationStack(path: $router.dailyLogPath) {
             DailiesView(dailies: dailies)
                 .navigationDestination(for: Daily.self) { daily in
@@ -83,7 +82,7 @@ struct ContentView: View {
         .tag(TabRouter.Tab.dailyLog)
     }
     
-    var poolTab: some View {
+    private var poolTab: some View {
         NavigationStack(path: $router.poolPath) {
             if let pool {
                 PoolView(pool: pool)

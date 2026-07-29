@@ -10,6 +10,7 @@ import Foundation
 struct Constants {
     // Home strings
     static let homeString = "Home"
+    static let appString = "Clutter"
     
     // Topic strings
     static let topicsString = "Topics"
@@ -42,8 +43,9 @@ struct Constants {
     static let plusIconString = "plus"
     static let bulletIconString = "square"
     static let trashIconString = "trash"
-    static let starIconString = "star"
+    static let starIconString = "star.fill"
     static let exclamationmarkIconString = "exclamationmark"
+    static let heartIconString = "heart.fill"
     
     // Action strings
     enum Action {

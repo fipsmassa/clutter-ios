@@ -41,6 +41,8 @@ struct DailiesView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(Color.brown.secondary)
         .toolbar {
             if !dailies.isEmpty {
                 Button(Constants.addDailiesButtonString, systemImage: Constants.plusIconString) {

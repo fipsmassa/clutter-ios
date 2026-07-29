@@ -22,38 +22,18 @@ struct TopicsView: View {
     }
     
     var body: some View {
-        
         VStack {
-            List {
-                ForEach(topics, id: \.id) { topic in
-                    @Bindable var topic = topic
-                    
-                    NavigationLink(value: topic) {
-                        Text(topic.title)
-                    }
-                    .swipeActions(edge: .leading) {
-                        Button(topic.isFavorite ? Constants.Action.notFavorite : Constants.Action.favorite, systemImage: Constants.starIconString) {
-                            toggleIsFavorite(topic)
-                        }
-                        .tint(.yellow)
-                    }
-                    .swipeActions {
-                        Button(Constants.Action.delete, systemImage: Constants.trashIconString) {
-                            delete(topic)
-                        }
-                        .tint(.red)
-                    }
-                }
-                .listRowBackground(Color.yellow)
-            }
-            .scrollContentBackground(.hidden)
-            .background(Color.mint)
+            topicList
             .toolbar {
-                if !topics.isEmpty {
-                    Button(Constants.addTopicsButtonString, systemImage: Constants.plusIconString) {
-                        showAddTopicSheet = true
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    if !topics.isEmpty {
+                        Button(Constants.addTopicsButtonString, systemImage: Constants.plusIconString) {
+                            showAddTopicSheet = true
+                        }
                     }
                 }
+
+                
             }
             .sheet(isPresented: $showAddTopicSheet) {
                 AddTopicSheet { title, isFavorite in
@@ -78,6 +58,35 @@ struct TopicsView: View {
                 }
             }
         }
+    }
+    
+    private var topicList: some View {
+        List {
+            ForEach(topics, id: \.id) { topic in
+                @Bindable var topic = topic
+                
+                NavigationLink(value: topic) {
+                    HStack {
+                        topic.isFavorite ? Image(systemName: Constants.starIconString).foregroundColor(.yellow) : nil
+                        Text(topic.title)
+                    }
+                }
+                .swipeActions(edge: .leading) {
+                    Button(topic.isFavorite ? Constants.Action.notFavorite : Constants.Action.favorite, systemImage: Constants.starIconString) {
+                        toggleIsFavorite(topic)
+                    }
+                    .tint(.yellow)
+                }
+                .swipeActions {
+                    Button(Constants.Action.delete, systemImage: Constants.trashIconString) {
+                        delete(topic)
+                    }
+                    .tint(.red)
+                }
+            }
+        }
+        .scrollContentBackground(.hidden)
+        .background(Color.brown.secondary)
     }
 }
 

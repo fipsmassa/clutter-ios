@@ -35,6 +35,7 @@ struct HomeView: View {
                 } else {
                     ForEach(topics, id: \.id) { topic in
                         NavigationLink(value: topic) {
+                            topic.isFavorite ? Image(systemName: Constants.starIconString).foregroundColor(.yellow) : nil
                             Text(topic.title)
                         }
                     }
@@ -59,13 +60,14 @@ struct HomeView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(Color.brown.secondary)
     }
 }
 
 #Preview("with data") {
     NavigationStack {
         HomeView(topics: SampleData.topics, dailyLogs: SampleData.dailies)
-            .navigationTitle(Constants.homeString)
     }
     .environment(TabRouter())
 }

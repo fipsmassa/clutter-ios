@@ -14,25 +14,7 @@ struct DailyDetailView: View {
     @State private var showAddBulletSheet: Bool = false
     
     var body: some View {
-        List {
-            ForEach(daily.bullets, id: \.id) { bullet in
-                @Bindable var bullet = bullet
-                BulletRowView(bullet: bullet)
-                
-                    .swipeActions(edge: .leading) {
-                        Button(bullet.isImportant ? Constants.Action.notImportant : Constants.Action.important, systemImage: Constants.exclamationmarkIconString) {
-                            bullet.isImportant.toggle()
-                        }
-                        .tint(.yellow)
-                    }
-                    .swipeActions {
-                        Button(Constants.Action.delete, systemImage: Constants.trashIconString) {
-                            modelContext.delete(bullet)
-                        }
-                        .tint(.red)
-                    }
-            }
-        }
+        bulletList
         .navigationTitle(daily.title)
         .toolbar {
             if !daily.bullets.isEmpty {
@@ -64,6 +46,30 @@ struct DailyDetailView: View {
                 .offset(y: -60)
             }
         }
+    }
+    
+    private var bulletList: some View {
+        List {
+            ForEach(daily.bullets, id: \.id) { bullet in
+                @Bindable var bullet = bullet
+                BulletRowView(bullet: bullet)
+                
+                    .swipeActions(edge: .leading) {
+                        Button(bullet.isImportant ? Constants.Action.notImportant : Constants.Action.important, systemImage: Constants.exclamationmarkIconString) {
+                            bullet.isImportant.toggle()
+                        }
+                        .tint(.yellow)
+                    }
+                    .swipeActions {
+                        Button(Constants.Action.delete, systemImage: Constants.trashIconString) {
+                            modelContext.delete(bullet)
+                        }
+                        .tint(.red)
+                    }
+            }
+        }
+        .scrollContentBackground(.hidden)
+        .background(Color.brown.secondary)
     }
 }
 

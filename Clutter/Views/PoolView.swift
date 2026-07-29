@@ -15,7 +15,7 @@ struct PoolView: View {
     
     var body: some View {
         List {
-            ForEach(pool.bullets, id: \.id) { bullet in
+            ForEach(pool.bullets) { bullet in
                 @Bindable var bullet = bullet
                 BulletRowView(bullet: bullet)
                 
@@ -33,6 +33,8 @@ struct PoolView: View {
                     }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(Color.brown.secondary)
         .toolbar {
             if !pool.bullets.isEmpty {
                 Button(Constants.addBulletButtonString, systemImage: Constants.plusIconString) {
