@@ -44,7 +44,7 @@ struct ContentView: View {
     
     private var homeTab: some View {
         NavigationStack(path: $router.homePath) {
-            HomeView(topics: topics, dailyLogs: dailies)
+            HomeView(dailyLogs: dailies)
                 .navigationDestination(for: Topic.self) { topic in
                     TopicDetailView(topic: topic)
                 }
@@ -59,7 +59,7 @@ struct ContentView: View {
     
    private var topicsTab: some View {
         NavigationStack(path: $router.topicPath) {
-            TopicsView(topics: topics)
+            TopicsView()
                 .navigationDestination(for: Topic.self) { topic in
                     TopicDetailView(topic: topic)
                 }

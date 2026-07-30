@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     @Environment(TabRouter.self) private var router
-
-    let topics: [Topic]
+    @Query(sort: \Topic.metadata.createdAt) private var topics: [Topic]
+    
     let dailyLogs: [Daily]
     
     func navigateToTopicsView() {
@@ -22,39 +23,40 @@ struct HomeView: View {
     }
     
     var body: some View {
-        List {
-            Section(Constants.topicsString) {
-                if topics.isEmpty {
-                    VStack(spacing: 0) {
-                        Text(Constants.emptyTopicsLabelString)
-                        Text(Constants.emptyTopicsDescriptionString)
-                        Button(action: navigateToTopicsView, label: {
-                            Text(Constants.addTopicsButtonString)
-                        })
-                    }
-                } else {
-                    ForEach(topics, id: \.id) { topic in
-                        NavigationLink(value: topic) {
-                            topic.isFavorite ? Image(systemName: Constants.starIconString).foregroundColor(.yellow) : nil
-                            Text(topic.title)
-                        }
-                    }
+        VStack(alignment: .leading) {
+            Text(Constants.topicsString)
+                .font(.headline)
+                .padding(.top)
+                .padding(.leading, 20)
+            
+            if topics.isEmpty {
+                VStack(spacing: 0) {
+                    Text(Constants.emptyTopicsLabelString)
+                    Text(Constants.emptyTopicsDescriptionString)
+                    Button(action: navigateToTopicsView, label: {
+                        Text(Constants.addTopicsButtonString)
+                    })
                 }
+            } else {
+                TopicList()
             }
             
-            Section(Constants.dailiesString) {
-                if dailyLogs.isEmpty {
-                    VStack(spacing: 0) {
-                        Text(Constants.emptyDailiesLabelString)
-                        Text(Constants.emptyDailiesDescriptionString)
-                        Button(action: navigateToDailiesView, label: {
-                            Text(Constants.addDailiesButtonString)
-                        })
-                    }
-                } else {
-                    ForEach(dailyLogs, id: \.id) { dailyLogItem in
-                        NavigationLink(value: dailyLogItem) {
-                            Text(dailyLogItem.title)
+            
+            List {
+                Section(Constants.dailiesString) {
+                    if dailyLogs.isEmpty {
+                        VStack(spacing: 0) {
+                            Text(Constants.emptyDailiesLabelString)
+                            Text(Constants.emptyDailiesDescriptionString)
+                            Button(action: navigateToDailiesView, label: {
+                                Text(Constants.addDailiesButtonString)
+                            })
+                        }
+                    } else {
+                        ForEach(dailyLogs, id: \.id) { dailyLogItem in
+                            NavigationLink(value: dailyLogItem) {
+                                Text(dailyLogItem.title)
+                            }
                         }
                     }
                 }
@@ -67,14 +69,16 @@ struct HomeView: View {
 
 #Preview("with data") {
     NavigationStack {
-        HomeView(topics: SampleData.topics, dailyLogs: SampleData.dailies)
+        HomeView(dailyLogs: SampleData.dailies)
+            .modelContainer(SampleData.previewContainer)
+            .navigationTitle(Constants.homeString)
     }
     .environment(TabRouter())
 }
 
 #Preview("empty state") {
     NavigationStack {
-        HomeView(topics: [], dailyLogs: [])
+        HomeView(dailyLogs: [])
             .navigationTitle(Constants.homeString)
     }
     .environment(TabRouter())

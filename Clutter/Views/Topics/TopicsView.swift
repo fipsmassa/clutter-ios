@@ -11,19 +11,13 @@ import SwiftData
 struct TopicsView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var showAddTopicSheet: Bool = false
-    var topics: [Topic]
-    
-    func delete(_ topic: Topic) {
-        modelContext.delete(topic)
-    }
-    
-    func toggleIsFavorite(_ topic: Topic) {
-        topic.isFavorite.toggle()
-    }
+    @Query(sort: \Topic.metadata.createdAt) private var topics: [Topic]
     
     var body: some View {
         VStack {
-            topicList
+            TopicList()
+                .scrollContentBackground(.hidden)
+                .background(Color.brown.secondary)
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     if !topics.isEmpty {
@@ -59,47 +53,19 @@ struct TopicsView: View {
             }
         }
     }
-    
-    private var topicList: some View {
-        List {
-            ForEach(topics, id: \.id) { topic in
-                @Bindable var topic = topic
-                
-                NavigationLink(value: topic) {
-                    HStack {
-                        topic.isFavorite ? Image(systemName: Constants.starIconString).foregroundColor(.yellow) : nil
-                        Text(topic.title)
-                    }
-                }
-                .swipeActions(edge: .leading) {
-                    Button(topic.isFavorite ? Constants.Action.notFavorite : Constants.Action.favorite, systemImage: Constants.starIconString) {
-                        toggleIsFavorite(topic)
-                    }
-                    .tint(.yellow)
-                }
-                .swipeActions {
-                    Button(Constants.Action.delete, systemImage: Constants.trashIconString) {
-                        delete(topic)
-                    }
-                    .tint(.red)
-                }
-            }
-        }
-        .scrollContentBackground(.hidden)
-        .background(Color.brown.secondary)
-    }
 }
 
 #Preview("with data") {
     NavigationStack {
-        TopicsView(topics: SampleData.topics)
+        TopicsView()
+            .modelContainer(SampleData.previewContainer)
             .navigationTitle(Constants.topicsString)
     }
 }
 
 #Preview("empty state") {
     NavigationStack {
-        TopicsView(topics: [])
+        TopicsView()
             .navigationTitle(Constants.topicsString)
     }
 }
