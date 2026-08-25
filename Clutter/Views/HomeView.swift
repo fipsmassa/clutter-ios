@@ -9,8 +9,15 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
+    let activeStatus = ItemStatus.active
+    
     @Environment(TabRouter.self) private var router
-    @Query(sort: \Topic.metadata.createdAt) private var topics: [Topic]
+    @Query(filter: #Predicate<Topic> { topic in
+        topic.isFavorite
+    }, sort: \Topic.metadata.createdAt) private var favTopics: [Topic]
+    @Query(filter: #Predicate<Topic> { topic in
+        !topic.isFavorite
+    }, sort: \Topic.metadata.createdAt) private var nonFavTopics: [Topic]
     
     let dailyLogs: [Daily]
     
@@ -23,13 +30,9 @@ struct HomeView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(Constants.topicsString)
-                .font(.headline)
-                .padding(.top)
-                .padding(.leading, 20)
+        VStack() {
             
-            if topics.isEmpty {
+            if favTopics.isEmpty {
                 VStack(spacing: 0) {
                     Text(Constants.emptyTopicsLabelString)
                     Text(Constants.emptyTopicsDescriptionString)
@@ -38,29 +41,43 @@ struct HomeView: View {
                     })
                 }
             } else {
-                TopicList()
-            }
-            
-            
-            List {
-                Section(Constants.dailiesString) {
-                    if dailyLogs.isEmpty {
-                        VStack(spacing: 0) {
-                            Text(Constants.emptyDailiesLabelString)
-                            Text(Constants.emptyDailiesDescriptionString)
-                            Button(action: navigateToDailiesView, label: {
-                                Text(Constants.addDailiesButtonString)
-                            })
-                        }
-                    } else {
-                        ForEach(dailyLogs, id: \.id) { dailyLogItem in
-                            NavigationLink(value: dailyLogItem) {
-                                Text(dailyLogItem.title)
-                            }
-                        }
+                LazyVGrid(columns: [GridItem(),
+                                    GridItem()], spacing: 24) {
+                    ForEach(favTopics) { topic in
+                        let doneBullets = topic.bullets.filter(\.self.isDone)
+                        
+                        CardView(title: topic.title, content: "\(doneBullets.count) / \(topic.bullets.count)", icon: Constants.starIconString, fav: true)
+                        
+                    }
+                    
+                    ForEach(nonFavTopics) { topic in
+                        let doneBullets = topic.bullets.filter(\.self.isDone)
+                        
+                        CardView(title: topic.title, content: "\(doneBullets.count) / \(topic.bullets.count)", icon: "star", fav: false)
                     }
                 }
+                                    .padding()
+            
+                
             }
+            
+            
+            
+            VStack(alignment: .leading) {
+                if dailyLogs.isEmpty {
+                    VStack(spacing: 0) {
+                        Text(Constants.emptyDailiesLabelString)
+                        Text(Constants.emptyDailiesDescriptionString)
+                        Button(action: navigateToDailiesView, label: {
+                            Text(Constants.addDailiesButtonString)
+                        })
+                    }
+                } else {
+                    DailyList()
+                        .contentMargins(.top, 0)
+                }
+            }
+            .padding(.top, 20)
         }
         .scrollContentBackground(.hidden)
         .background(Color.brown.secondary)

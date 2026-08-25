@@ -29,18 +29,7 @@ struct DailiesView: View {
     }
     
     var body: some View {
-        List {
-            ForEach(dailies, id: \.id) { daily in
-                NavigationLink(value: daily) {
-                    Text(daily.title)
-                }
-            }
-            .onDelete { indexSet in
-                for index in indexSet {
-                    modelContext.delete(dailies[index])
-                }
-            }
-        }
+        DailyList()
         .scrollContentBackground(.hidden)
         .background(Color.brown.secondary)
         .toolbar {
@@ -73,6 +62,7 @@ struct DailiesView: View {
 #Preview("with data") {
     NavigationStack {
         DailiesView(dailies: SampleData.dailies)
+            .modelContainer(SampleData.previewContainer)
             .navigationTitle(Constants.dailiesString)
     }
 }

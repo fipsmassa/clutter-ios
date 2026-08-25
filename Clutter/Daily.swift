@@ -13,7 +13,7 @@ class Daily {
     @Attribute(.unique) var id: UUID
     var title: String
     var date: Date
-    var status: ContainerStatus
+    var status: ItemStatus
     var isFavorite: Bool
     var metadata: Metadata
  
@@ -23,7 +23,7 @@ class Daily {
         id: UUID = UUID(),
         title: String,
         date: Date = .now,
-        status: ContainerStatus = .active,
+        status: ItemStatus = .active,
         isFavorite: Bool = false,
         bullets: [Bullet] = [],
         metadata: Metadata = Metadata()

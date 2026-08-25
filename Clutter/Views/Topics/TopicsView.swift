@@ -26,8 +26,6 @@ struct TopicsView: View {
                         }
                     }
                 }
-
-                
             }
             .sheet(isPresented: $showAddTopicSheet) {
                 AddTopicSheet { title, isFavorite in

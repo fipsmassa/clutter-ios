@@ -12,18 +12,18 @@ import Foundation
 class Topic {
     @Attribute(.unique) var id: UUID
     var title: String
-    var status: ContainerStatus
+    var status: ItemStatus
     var isFavorite: Bool
     var metadata: Metadata
- 
+    
     // .cascade: löscht man ein Topic, werden auch alle zugehörigen
     // Bullets automatisch mitgelöscht (statt als "Waisen" in der DB
     // zurückzubleiben).
     @Relationship(deleteRule: .cascade) var bullets: [Bullet]
- 
+    
     init(
         title: String,
-        status: ContainerStatus = .active,
+        status: ItemStatus = .active,
         isFavorite: Bool = false,
         bullets: [Bullet] = [],
     ) {
@@ -33,5 +33,9 @@ class Topic {
         self.isFavorite = isFavorite
         self.bullets = bullets
         self.metadata = Metadata(createdAt: Date())
+    }
+    
+    var isFavoriteSort: UInt8 {
+        isFavorite ? 1 : 0
     }
 }

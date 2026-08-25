@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ContainerStatus: String, Codable, CaseIterable {
+enum ItemStatus: String, Codable, CaseIterable {
     case active
     case archived
 }

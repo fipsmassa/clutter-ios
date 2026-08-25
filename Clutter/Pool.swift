@@ -13,7 +13,7 @@ class Pool {
     @Attribute(.unique) var id: UUID
     @Attribute(.unique) private var singletonKey: String
     var title: String
-    var status: ContainerStatus
+    var status: ItemStatus
     var isFavorite: Bool
     var metadata: Metadata
  
@@ -22,7 +22,7 @@ class Pool {
     init(
         id: UUID = UUID(),
         title: String,
-        status: ContainerStatus = .active,
+        status: ItemStatus = .active,
         isFavorite: Bool = false,
         bullets: [Bullet] = [],
         metadata: Metadata = Metadata()

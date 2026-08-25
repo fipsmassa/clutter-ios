@@ -12,6 +12,10 @@ struct TopicList: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \Topic.metadata.createdAt) private var topics: [Topic]
     
+    private var sortedTopics: [Topic] {
+        topics.sorted(using: KeyPathComparator(\Topic.isFavoriteSort, order: .reverse))
+    }
+    
     func delete(_ topic: Topic) {
         modelContext.delete(topic)
     }
@@ -22,7 +26,7 @@ struct TopicList: View {
     
     var body: some View {
         List {
-            ForEach(topics) { topic in
+            ForEach(sortedTopics) { topic in
                 @Bindable var topic = topic
                 
                 NavigationLink(value: topic) {
@@ -46,6 +50,7 @@ struct TopicList: View {
             }
         }
     }
+    
     
     
 }

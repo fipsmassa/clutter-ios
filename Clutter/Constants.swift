@@ -46,6 +46,7 @@ struct Constants {
     static let starIconString = "star.fill"
     static let exclamationmarkIconString = "exclamationmark"
     static let heartIconString = "heart.fill"
+    static let checkIconString = "checkmark.circle"
     
     // Action strings
     enum Action {

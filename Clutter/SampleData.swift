@@ -77,12 +77,13 @@ enum SampleData {
         Topic(
             title: "Umzug 2025",
             status: .archived,
+            isFavorite: true,
             bullets: makeBullets([
                 .done("Umzugsunternehmen beauftragt"),
                 .done("Adresse bei Behörden geändert"),
                 .done("Alte Wohnung übergeben")
             ])
-        )
+        ),
     ]
  
     // MARK: - Daily Logs
