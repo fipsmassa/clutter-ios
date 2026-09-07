@@ -41,24 +41,24 @@ struct HomeView: View {
                     })
                 }
             } else {
-                LazyVGrid(columns: [GridItem(),
-                                    GridItem()], spacing: 24) {
-                    ForEach(favTopics) { topic in
-                        let doneBullets = topic.bullets.filter(\.self.isDone)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 20) {
+                        ForEach(favTopics.indices, id: \.self) { index in
+                            let topic = favTopics[index]
+                            let doneBullets = topic.bullets.filter(\.self.isDone)
+                            
+                            CardView(title: topic.title, content: "\(doneBullets.count) / \(topic.bullets.count)", icon: Constants.starIconString, fav: true)
+                                .padding(.leading, index == 0 ? 20 : 0)
+                            
+                        }
                         
-                        CardView(title: topic.title, content: "\(doneBullets.count) / \(topic.bullets.count)", icon: Constants.starIconString, fav: true)
-                        
-                    }
-                    
-                    ForEach(nonFavTopics) { topic in
-                        let doneBullets = topic.bullets.filter(\.self.isDone)
-                        
-                        CardView(title: topic.title, content: "\(doneBullets.count) / \(topic.bullets.count)", icon: "star", fav: false)
+                        ForEach(nonFavTopics) { topic in
+                            let doneBullets = topic.bullets.filter(\.self.isDone)
+                            
+                            CardView(title: topic.title, content: "\(doneBullets.count) / \(topic.bullets.count)", icon: "star", fav: false)
+                        }
                     }
                 }
-                                    .padding()
-            
-                
             }
             
             
