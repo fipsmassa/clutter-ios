@@ -12,7 +12,10 @@ import SwiftData
 struct ClutterApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Topic.self,
+            Daily.self,
+            Pool.self,
+            Bullet.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -28,5 +31,15 @@ struct ClutterApp: App {
             ContentView()
         }
         .modelContainer(sharedModelContainer)
+    }
+}
+
+extension ModelContext {
+    var sqliteCommand: String {
+        if let url = container.configurations.first?.url.path(percentEncoded: false) {
+            "sqlite3 \"\(url)\""
+        } else {
+            "No SQLite database found."
+        }
     }
 }
